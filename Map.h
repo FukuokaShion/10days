@@ -7,19 +7,29 @@ class Map {
 	~Map();
 	void Initialize();
 	void Update();
-	void Draw(ViewProjection viewProjection);
+	void StageDraw(ViewProjection viewProjection);
+	void FrameDraw(ViewProjection viewProjection);
+
+
+public:
+	//マップチップ
+	static const int xElement = 12;
+	static const int zElement = 12;
+	int mapchip[xElement][zElement];
+	WorldTransform worldTransform_[xElement][zElement];
 
   private:
 	Model* model_ = nullptr;
+	float modelSize = NULL;
+
+	Model* startModel_ = nullptr;
+	Model* goleModel_ = nullptr;
+	Model* teleportModel_ = nullptr;
+
+	uint32_t baseTexture = 0;
 	
 	//マップの要素数
-	static const int xElement = 12;
-	static const int yElement = 2;
-	static const int zElement = 12;
-	WorldTransform worldTransform_[xElement][yElement][zElement];
 
-	//マップチップ
-	int mapchip[xElement][yElement][zElement];
+	WorldTransform baseWorldTransform_;
 
-	float modelSize = NULL;
 };

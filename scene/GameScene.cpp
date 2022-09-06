@@ -60,6 +60,7 @@ void GameScene::Initialize() {
 	//プレイヤー
 	player_ = new Player();
 	player_->Initialize();
+	player_->SetMap(map_);
 }
 
 
@@ -67,6 +68,9 @@ void GameScene::Update() {
 
 	if (scene == 0) {
 		if (input_->TriggerKey(DIK_SPACE)) {
+			map_->Initialize();
+			player_->Initialize();
+			player_->SetMap(map_);
 			scene = 1;
 		}
 
@@ -84,7 +88,12 @@ void GameScene::Update() {
 	
 	} else if (scene == 3) {
 		player_->Move();
-	
+		if (input_->TriggerKey(DIK_R)) {
+			map_->Initialize();
+			player_->Initialize();
+			player_->SetMap(map_);
+			scene = 1;
+		}
 	}
 
 
@@ -147,16 +156,20 @@ void GameScene::Draw() {
 		
 
 	} else if (scene == 1) {
-		map_->Draw(viewProjection_);
+		map_->StageDraw(viewProjection_);
 		player_->Draw(viewProjection_);
 	
 	} else if (scene == 2) {
 		player_->Draw(viewProjection_);
+		map_->FrameDraw(viewProjection_);
 	
 	} else if (scene == 3) {
-		map_->Draw(viewProjection_);
+		map_->StageDraw(viewProjection_);
 		player_->Draw(viewProjection_);
 
+		if (player_->isGole()==true) {
+			scene = 0;
+		}
 	}
 
 
@@ -176,10 +189,7 @@ void GameScene::Draw() {
 	if (scene == 0) {
 		title->Draw();
 
-	} else if (scene == 1) {
-
-
-	} 
+	}
 
 
 	// デバッグテキストの描画
