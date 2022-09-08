@@ -23,8 +23,10 @@ class Player {
 	Map* map_;
 	int pos[2];
 
+	float PI = 3.141592;
+
 	//Move—p
 	std::vector<int> a;
-	const int  moveTime = 60 * 1;
+	const int  moveTime = 50;
 	int moveTimer_ = moveTime;
 };
