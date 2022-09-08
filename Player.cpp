@@ -68,6 +68,29 @@ void Player::Move() {
 					worldTransform_.rotation_ += Vector3( PI/moveTime/2, 0, 0);
 					if (moveTimer_ == 0) {
 						pos[1]++;
+						//ワープ処理
+						if (map_->mapchip[pos[0]][pos[1]] == 4) {
+							for (int x = 0; x < map_->xElement; x++) {
+								for (int z = 0; z < map_->zElement; z++) {
+									if (map_->mapchip[x][z] == 5) {
+										pos[0] = x;
+										pos[1] = z;
+										worldTransform_.translation_ = map_->worldTransform_[x][z].translation_;
+									}
+								}
+							}
+						}
+						else if (map_->mapchip[pos[0]][pos[1]] == 5) {
+							for (int x = 0; x < map_->xElement; x++) {
+								for (int z = 0; z < map_->zElement; z++) {
+									if (map_->mapchip[x][z] == 4) {
+										pos[0] = x;
+										pos[1] = z;
+										worldTransform_.translation_ = map_->worldTransform_[x][z].translation_;
+									}
+								}
+							}
+						}
 					}
 				}else if (map_->mapchip[pos[0]][pos[1] + 1] == 1) {
 					//配列の先頭を削除
@@ -83,6 +106,29 @@ void Player::Move() {
 					worldTransform_.rotation_ += Vector3(-PI / moveTime / 2, 0, 0);
 					if (moveTimer_ == 0) {
 						pos[1]--;
+						//ワープ処理
+						if (map_->mapchip[pos[0]][pos[1]] == 4) {
+							for (int x = 0; x < map_->xElement; x++) {
+								for (int z = 0; z < map_->zElement; z++) {
+									if (map_->mapchip[x][z] == 5) {
+										pos[0] = x;
+										pos[1] = z;
+										worldTransform_.translation_ = map_->worldTransform_[x][z].translation_;
+									}
+								}
+							}
+						}
+						else if (map_->mapchip[pos[0]][pos[1]] == 5) {
+							for (int x = 0; x < map_->xElement; x++) {
+								for (int z = 0; z < map_->zElement; z++) {
+									if (map_->mapchip[x][z] == 4) {
+										pos[0] = x;
+										pos[1] = z;
+										worldTransform_.translation_ = map_->worldTransform_[x][z].translation_;
+									}
+								}
+							}
+						}
 					}
 					
 				}else if (map_->mapchip[pos[0]][pos[1] - 1] == 1) {
@@ -99,6 +145,29 @@ void Player::Move() {
 					worldTransform_.rotation_ += Vector3(0, 0, PI / moveTime / 2);
 					if (moveTimer_ == 0) {
 						pos[0]--;
+						//ワープ処理
+						if (map_->mapchip[pos[0]][pos[1]] == 4) {
+							for (int x = 0; x < map_->xElement; x++) {
+								for (int z = 0; z < map_->zElement; z++) {
+									if (map_->mapchip[x][z] == 5) {
+										pos[0] = x;
+										pos[1] = z;
+										worldTransform_.translation_ = map_->worldTransform_[x][z].translation_;
+									}
+								}
+							}
+						}
+						else if (map_->mapchip[pos[0]][pos[1]] == 5) {
+							for (int x = 0; x < map_->xElement; x++) {
+								for (int z = 0; z < map_->zElement; z++) {
+									if (map_->mapchip[x][z] == 4) {
+										pos[0] = x;
+										pos[1] = z;
+										worldTransform_.translation_ = map_->worldTransform_[x][z].translation_;
+									}
+								}
+							}
+						}
 					}
 				}else if (map_->mapchip[pos[0] - 1][pos[1]] == 1) {
 					//配列の先頭を削除
@@ -114,6 +183,29 @@ void Player::Move() {
 					worldTransform_.rotation_ += Vector3(0, 0, -PI / moveTime / 2);
 					if (moveTimer_ == 0) {
 						pos[0]++;
+						//ワープ処理
+						if (map_->mapchip[pos[0]][pos[1]] == 4) {
+							for (int x = 0; x < map_->xElement; x++) {
+								for (int z = 0; z < map_->zElement; z++) {
+									if (map_->mapchip[x][z] == 5) {
+										pos[0] = x;
+										pos[1] = z;
+										worldTransform_.translation_ = map_->worldTransform_[x][z].translation_;
+									}
+								}
+							}
+						}
+						else if (map_->mapchip[pos[0]][pos[1]] == 5) {
+							for (int x = 0; x < map_->xElement; x++) {
+								for (int z = 0; z < map_->zElement; z++) {
+									if (map_->mapchip[x][z] == 4) {
+										pos[0] = x;
+										pos[1] = z;
+										worldTransform_.translation_ = map_->worldTransform_[x][z].translation_;
+									}
+								}
+							}
+						}
 					}
 				}else if (map_->mapchip[pos[0] + 1][pos[1]] == 1) {
 					//配列の先頭を削除
