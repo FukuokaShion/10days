@@ -13,10 +13,12 @@ class Map {
 
 public:
 	//マップチップ
-	static const int xElement = 12;
-	static const int zElement = 12;
-	int mapchip[xElement][zElement];
-	WorldTransform worldTransform_[xElement][zElement];
+	int xElement;
+	int zElement;
+	int mapchip[15][15];
+	WorldTransform worldTransform_[15][15];
+
+	
 
   private:
 	Model* model_ = nullptr;
@@ -28,8 +30,7 @@ public:
 
 	uint32_t baseTexture = 0;
 	
-	//マップの要素数
-
-	WorldTransform baseWorldTransform_;
-
+	////土台用
+	int baseMapchip[15][15];
+	WorldTransform baseWorldTransform_[15][15];
 };

@@ -25,7 +25,7 @@ void Player::Initialize() {
 	moveTimer_ = moveTime;
 
 	worldTransform_.Initialize();
-	worldTransform_.translation_ = Vector3(pos[0] * 2 - 11, 0, pos[1] * 2 - 11);
+	worldTransform_.translation_ = Vector3((pos[0] * 2) - (map_->xElement - 1), 0, (pos[1] * 2) - (map_->zElement - 1));
 	worldTransform_.rotation_ = Vector3(0, 0, 0);
 
 	//s—ñÝ’è
@@ -42,6 +42,7 @@ void Player::Initialize() {
 	worldTransform_.TransferMatrix();
 
 //-----------------------------
+	
 }
 
 void Player::Entry(Input* input) {
@@ -111,7 +112,7 @@ void Player::Move() {
 				}
 			}
 		//-----------------
-			if (a.front() == 1) {
+			else if (a.front() == 1) {
 				if (map_->mapchip[pos[0]][pos[1] - 1] != 1) {
 					worldTransform_.translation_ += Vector3(0, 0, -2.0f/moveTime);
 					worldTransform_.rotation_ += Vector3(-PI / moveTime / 2, 0, 0);
@@ -150,7 +151,7 @@ void Player::Move() {
 				}
 			}
 		//-----------------
-			if (a.front() == 2) {
+			else if (a.front() == 2) {
 				if (map_->mapchip[pos[0] - 1][pos[1]] != 1) {
 					worldTransform_.translation_ += Vector3(-2.0f/moveTime, 0, 0);
 					worldTransform_.rotation_ += Vector3(0, 0, PI / moveTime / 2);
@@ -188,7 +189,7 @@ void Player::Move() {
 				}
 			}
 		//-----------------
-			if (a.front() == 3) {
+			else if (a.front() == 3) {
 				if (map_->mapchip[pos[0] + 1][pos[1]] != 1) {
 					worldTransform_.translation_ += Vector3(2.0f/moveTime, 0, 0);
 					worldTransform_.rotation_ += Vector3(0, 0, -PI / moveTime / 2);

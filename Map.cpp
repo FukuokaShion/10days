@@ -6,7 +6,7 @@ Map::~Map() {
 }
 
 void Map::Initialize(int stage) {
-//------------------モデル生成-----------------
+	//------------------モデル生成-----------------
 	std::string a = "cube";
 	model_ = Model::CreateFromOBJ(a, false);
 	modelSize = 2;
@@ -23,17 +23,35 @@ void Map::Initialize(int stage) {
 
 	baseTexture = TextureManager::Load("base.png");
 
-//------------------座標設定-------------------
-	//マップチップ
+
+
+	//------------------座標設定-------------------
+		//ステージごとの要素数
+	if (stage == 0) {
+		xElement = 12;
+		zElement = 12;
+	}
+	else if (stage == 1) {
+		xElement = 14;
+		zElement = 14;
+	}
+	else if (stage == 2) {
+		xElement = 8;
+		zElement = 6;
+	}
+
+
+	
 	for (int x = 0; x < xElement; x++) {
 		for (int z = 0; z < zElement; z++) {
+		//マップチップ
 			worldTransform_[x][z].Initialize();
 			//左下が0,0,0
 			worldTransform_[x][z].translation_ = Vector3(
-			  (x * modelSize) - (xElement / 2 * modelSize - modelSize / 2),
+				(x * modelSize) - (xElement / 2 * modelSize - modelSize / 2),
 				0,
-			  (z * modelSize) - (zElement / 2 * modelSize - modelSize / 2)
-				);
+				(z * modelSize) - (zElement / 2 * modelSize - modelSize / 2)
+			);
 			//行列設定
 			Matrix4 matScale = AffineScale(worldTransform_[x][z]);
 			Matrix4 matRotaX = AffineRotaX(worldTransform_[x][z]);
@@ -46,40 +64,44 @@ void Map::Initialize(int stage) {
 
 			//行列の転送
 			worldTransform_[x][z].TransferMatrix();
+
+		//土台
+			baseWorldTransform_[x][z].Initialize();
+			//左下が0,0,0
+			baseWorldTransform_[x][z].translation_ = Vector3(
+				(x * modelSize) - (xElement / 2 * modelSize - modelSize / 2),
+				-2,
+				(z * modelSize) - (zElement / 2 * modelSize - modelSize / 2)
+			);
+			//行列設定
+			matScale = AffineScale(baseWorldTransform_[x][z]);
+			matRotaX = AffineRotaX(baseWorldTransform_[x][z]);
+			matRotaY = AffineRotaY(baseWorldTransform_[x][z]);
+			matRotaZ = AffineRotaZ(baseWorldTransform_[x][z]);
+			matRota = AffineRota(matRotaZ, matRotaX, matRotaY);
+			matTrans = AffineTrans(baseWorldTransform_[x][z]);
+			//掛け
+			baseWorldTransform_[x][z].matWorld_ = AffineWorld(matScale, matRota, matTrans);
+
+			//行列の転送
+			baseWorldTransform_[x][z].TransferMatrix();
 		}
 	}
-	
-	//土台
-	baseWorldTransform_.Initialize();
-	baseWorldTransform_.scale_ = Vector3(xElement, 1, zElement);
-	baseWorldTransform_.translation_ = Vector3(0, -2, 0);
-	//行列設定
-	Matrix4 matScale = AffineScale(baseWorldTransform_);
-	Matrix4 matRotaX = AffineRotaX(baseWorldTransform_);
-	Matrix4 matRotaY = AffineRotaY(baseWorldTransform_);
-	Matrix4 matRotaZ = AffineRotaZ(baseWorldTransform_);
-	Matrix4 matRota = AffineRota(matRotaZ, matRotaX, matRotaY);
-	Matrix4 matTrans = AffineTrans(baseWorldTransform_);
-	//掛け
-	baseWorldTransform_.matWorld_ = AffineWorld(matScale, matRota, matTrans);
 
-	//行列の転送
-	baseWorldTransform_.TransferMatrix();
-
-//-----------マップチップの読み込み-------------
-	//仮で直接書き込み
+	//-----------マップチップの読み込み-------------
+		//仮で直接書き込み
 	for (int x = 0; x < xElement; x++) {
 		for (int z = 0; z < zElement; z++) {
 			mapchip[x][z] = 1;
 		}
 	}
-	
+
 
 	//試しに特定の場所に穴をあける
 	//左下が0,0,0
 	//1壁 2スタート 3ゴール 4ワープ
 	for (int x = 1; x < xElement - 1; x++) {
-		for (int z = 1; z < xElement - 1; z++) {
+		for (int z = 1; z < zElement - 1; z++) {
 			mapchip[x][z] = 0;
 		}
 	}
@@ -144,8 +166,14 @@ void Map::Initialize(int stage) {
 		mapchip[10][3] = 1;
 	}
 
+	//------------------ステージ3------------------------------
+	if (stage == 2) {
+		mapchip[1][2] = 2;
+		mapchip[6][4] = 3;
+	}
 
-//---------------------------------------
+
+	//---------------------------------------
 
 }
 
@@ -155,24 +183,29 @@ void Map::Update() {
 
 
 void Map::FrameDraw(ViewProjection viewProjection) {
-	model_->Draw(baseWorldTransform_, viewProjection, baseTexture);
+	for (int x = 0; x < xElement; x++) {
+		for (int z = 0; z < zElement; z++) {
+			model_->Draw(baseWorldTransform_[x][z], viewProjection, baseTexture);
+		}
+	}
 	for (int x = 0; x < xElement; x++) {
 		model_->Draw(worldTransform_[x][0], viewProjection);
-		model_->Draw(worldTransform_[x][zElement-1], viewProjection);
+		model_->Draw(worldTransform_[x][zElement - 1], viewProjection);
 	}
 	for (int z = 0; z < zElement; z++) {
 		model_->Draw(worldTransform_[0][z], viewProjection);
-		model_->Draw(worldTransform_[xElement-1][z], viewProjection);
+		model_->Draw(worldTransform_[xElement - 1][z], viewProjection);
 	}
 
 }
 
-void Map::StageDraw(ViewProjection viewProjection){
-	model_->Draw(baseWorldTransform_, viewProjection,baseTexture);
+void Map::StageDraw(ViewProjection viewProjection) {
 
 
 	for (int x = 0; x < xElement; x++) {
 		for (int z = 0; z < zElement; z++) {
+			model_->Draw(baseWorldTransform_[x][z], viewProjection,baseTexture);
+
 			if (mapchip[x][z] == 1) {
 				model_->Draw(worldTransform_[x][z], viewProjection);
 			}
