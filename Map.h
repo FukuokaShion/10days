@@ -5,7 +5,7 @@
 class Map {
   public:
 	~Map();
-	void Initialize();
+	void Initialize(int stage);
 	void Update();
 	void StageDraw(ViewProjection viewProjection);
 	void FrameDraw(ViewProjection viewProjection);

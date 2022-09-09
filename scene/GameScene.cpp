@@ -24,6 +24,14 @@ void GameScene::Initialize() {
 	//タイトル用
 	titlePic = TextureManager::Load("title.png");
 	title = Sprite::Create(titlePic, {0, 0});
+	//ステージ選択用
+	selectStagePic = TextureManager::Load("stage.png");
+	selectStage = Sprite::Create(selectStagePic, { 0, 0 });
+	//クリア
+	clearPic = TextureManager::Load("clear.png");
+	clear = Sprite::Create(clearPic, { 0, 0 });
+
+	stage = 0;
 
 	//-----カメラ設定-----
 	{
@@ -55,47 +63,72 @@ void GameScene::Initialize() {
 //---------オブジェクト----------
 	//マップ
 	map_ = new Map();
-	map_->Initialize();
+	map_->Initialize(stage);
 
 	//プレイヤー
 	player_ = new Player();
-	player_->Initialize();
 	player_->SetMap(map_);
+	player_->Initialize();
 }
 
 
 void GameScene::Update() {
 
-	if (scene == 0) {
+	if (scene == 0) {//タイトル
 		if (input_->TriggerKey(DIK_SPACE)) {
-			map_->Initialize();
-			player_->Initialize();
-			player_->SetMap(map_);
 			scene = 1;
 		}
 
-	} else if (scene == 1) {
+	}
+	else if (scene == 1) {//ステージ選択
+		if (input_->TriggerKey(DIK_D)) {
+			stage++;
+		}
+
 		if (input_->TriggerKey(DIK_SPACE)) {
+			map_->Initialize(stage);
+			player_->SetMap(map_);
+			player_->Initialize();
 			scene = 2;
 		}
 
-	} else if (scene == 2) {
-		player_->Entry(input_);
-
+	}else if (scene == 2) {//迷路覚える
 		if (input_->TriggerKey(DIK_SPACE)) {
 			scene = 3;
 		}
+
+	} else if (scene == 3) {//入力
+		player_->Entry(input_);
+
+		if (input_->TriggerKey(DIK_SPACE)) {
+			scene = 4;
+		}
 	
-	} else if (scene == 3) {
+	} else if (scene == 4) {//動く
 		player_->Move();
 		if (input_->TriggerKey(DIK_R)) {
-			map_->Initialize();
-			player_->Initialize();
+			map_->Initialize(stage);
 			player_->SetMap(map_);
+			player_->Initialize();
 			scene = 1;
 		}
+		if (player_->isGole() == true) {
+			scene = 5;
+		}
 	}
-
+	else if (scene == 5) {//クリア画面
+		if (input_->TriggerKey(DIK_A)) {
+			scene = 0;
+		}
+		if (input_->TriggerKey(DIK_SPACE)) {
+			map_->Initialize(++stage);
+			player_->SetMap(map_);
+			player_->Initialize();
+			scene = 2;
+		}
+	}
+	
+	
 
 //----------デバッグカメラ------------
 	//デバッグカメラの起動
@@ -155,21 +188,18 @@ void GameScene::Draw() {
 	if (scene == 0) {
 		
 
-	} else if (scene == 1) {
+	} else if (scene == 2) {
 		map_->StageDraw(viewProjection_);
 		player_->Draw(viewProjection_);
 	
-	} else if (scene == 2) {
+	} else if (scene == 3) {
 		player_->Draw(viewProjection_);
 		map_->FrameDraw(viewProjection_);
 	
-	} else if (scene == 3) {
+	} else if (scene == 4) {
 		map_->StageDraw(viewProjection_);
 		player_->Draw(viewProjection_);
 
-		if (player_->isGole()==true) {
-			scene = 0;
-		}
 	}
 
 
@@ -188,7 +218,14 @@ void GameScene::Draw() {
 
 	if (scene == 0) {
 		title->Draw();
+	}
 
+	if (scene == 1) {
+		selectStage->Draw();
+	}
+
+	if (scene == 5) {
+		clear->Draw();
 	}
 
 

@@ -57,6 +57,8 @@ class GameScene {
 	DebugText* debugText_ = nullptr;
 	ViewProjection viewProjection_;
 
+	int stage;
+
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>
@@ -64,6 +66,12 @@ class GameScene {
 	//タイトル用
 	uint32_t titlePic = 0;
 	Sprite* title;
+	//クリア画面用
+	uint32_t selectStagePic = 0;
+	Sprite* selectStage;
+	//ステージ選択用
+	uint32_t clearPic = 0;
+	Sprite* clear;
 
 	//オブジェクト
 	Map* map_ = nullptr;

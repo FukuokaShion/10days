@@ -13,8 +13,15 @@ void Player::Initialize() {
 
 //--------座標設定------------
 	//初期のプレイヤーのマップチップ座標
-	pos[0] = 1;
-	pos[1] = 1;
+	for (int x = 0; x < map_->xElement;x++) {
+		for (int z = 0; z < map_->zElement; z++) {
+			if (map_->mapchip[x][z] == 2) {
+				pos[0] = x;
+				pos[1] = z;
+			}
+		}
+	}
+
 	moveTimer_ = moveTime;
 
 	worldTransform_.Initialize();
@@ -64,8 +71,12 @@ void Player::Move() {
 		//-----------------
 			if (a.front() == 0) {
 				if (map_->mapchip[pos[0]][pos[1] + 1] != 1) {
+					
 					worldTransform_.translation_ += Vector3(0, 0, 2.0f / moveTime);
+
 					worldTransform_.rotation_ += Vector3( PI/moveTime/2, 0, 0);
+
+
 					if (moveTimer_ == 0) {
 						pos[1]++;
 						//ワープ処理
