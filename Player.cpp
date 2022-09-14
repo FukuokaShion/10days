@@ -8,8 +8,7 @@ Player::~Player() {
 
 void Player::Initialize() {
 //------------------モデル生成-----------------
-	std::string a = "player";
-	model_ = Model::CreateFromOBJ(a, false);
+	model_ = Model::CreateFromOBJ("player", false);
 
 //--------座標設定------------
 	//初期のプレイヤーのマップチップ座標
@@ -42,22 +41,24 @@ void Player::Initialize() {
 	worldTransform_.TransferMatrix();
 
 //-----------------------------
-	
+	inputMemory.clear();
+
+
 }
 
 void Player::Entry(Input* input) {
 	//入力された方向を配列の後ろに追加していく
 	if (input->TriggerKey(DIK_W)) {
-		a.push_back(0);
+		inputMemory.push_back(0);
 	}
 	if (input->TriggerKey(DIK_S)) {
-		a.push_back(1);
+		inputMemory.push_back(1);
 	}
 	if (input->TriggerKey(DIK_A)) {
-		a.push_back(2);
+		inputMemory.push_back(2);
 	}
 	if (input->TriggerKey(DIK_D)) {
-		a.push_back(3);
+		inputMemory.push_back(3);
 	}
 }
 
@@ -67,10 +68,10 @@ void Player::Move() {
 	
 	if (moveTimer_ >= 0) {
 		//入力されたキー情報が残っているなら
-		if (!a.empty()) {
+		if (!inputMemory.empty()) {
 			//配列の先頭に入っている方向の処理
 		//-----------------
-			if (a.front() == 0) {
+			if (inputMemory.front() == 0) {
 				if (map_->mapchip[pos[0]][pos[1] + 1] != 1) {
 					
 					worldTransform_.translation_ += Vector3(0, 0, 2.0f / moveTime);
@@ -103,16 +104,27 @@ void Player::Move() {
 								}
 							}
 						}
+						else if (map_->mapchip[pos[0]][pos[1]] == 6) {
+							for (int x = 0; x < map_->xElement; x++) {
+								for (int z = 0; z < map_->zElement; z++) {
+									if (map_->mapchip[x][z] == 7) {
+										pos[0] = x;
+										pos[1] = z;
+										worldTransform_.translation_ = map_->worldTransform_[x][z].translation_;
+									}
+								}
+							}
+						}
 					}
 				}else if (map_->mapchip[pos[0]][pos[1] + 1] == 1) {
 					//配列の先頭を削除
-					a.erase(a.begin());
+					inputMemory.erase(inputMemory.begin());
 					//タイマーの初期化
 					moveTimer_ = moveTime;
 				}
 			}
 		//-----------------
-			else if (a.front() == 1) {
+			else if (inputMemory.front() == 1) {
 				if (map_->mapchip[pos[0]][pos[1] - 1] != 1) {
 					worldTransform_.translation_ += Vector3(0, 0, -2.0f/moveTime);
 					worldTransform_.rotation_ += Vector3(-PI / moveTime / 2, 0, 0);
@@ -141,17 +153,28 @@ void Player::Move() {
 								}
 							}
 						}
+						else if (map_->mapchip[pos[0]][pos[1]] == 6) {
+							for (int x = 0; x < map_->xElement; x++) {
+								for (int z = 0; z < map_->zElement; z++) {
+									if (map_->mapchip[x][z] == 7) {
+										pos[0] = x;
+										pos[1] = z;
+										worldTransform_.translation_ = map_->worldTransform_[x][z].translation_;
+									}
+								}
+							}
+						}
 					}
 					
 				}else if (map_->mapchip[pos[0]][pos[1] - 1] == 1) {
 					//配列の先頭を削除
-					a.erase(a.begin());
+					inputMemory.erase(inputMemory.begin());
 					//タイマーの初期化
 					moveTimer_ = moveTime;
 				}
 			}
 		//-----------------
-			else if (a.front() == 2) {
+			else if (inputMemory.front() == 2) {
 				if (map_->mapchip[pos[0] - 1][pos[1]] != 1) {
 					worldTransform_.translation_ += Vector3(-2.0f/moveTime, 0, 0);
 					worldTransform_.rotation_ += Vector3(0, 0, PI / moveTime / 2);
@@ -180,16 +203,27 @@ void Player::Move() {
 								}
 							}
 						}
+						else if (map_->mapchip[pos[0]][pos[1]] == 6) {
+							for (int x = 0; x < map_->xElement; x++) {
+								for (int z = 0; z < map_->zElement; z++) {
+									if (map_->mapchip[x][z] == 7) {
+										pos[0] = x;
+										pos[1] = z;
+										worldTransform_.translation_ = map_->worldTransform_[x][z].translation_;
+									}
+								}
+							}
+						}
 					}
 				}else if (map_->mapchip[pos[0] - 1][pos[1]] == 1) {
 					//配列の先頭を削除
-					a.erase(a.begin());
+					inputMemory.erase(inputMemory.begin());
 					//タイマーの初期化
 					moveTimer_ = moveTime;
 				}
 			}
 		//-----------------
-			else if (a.front() == 3) {
+			else if (inputMemory.front() == 3) {
 				if (map_->mapchip[pos[0] + 1][pos[1]] != 1) {
 					worldTransform_.translation_ += Vector3(2.0f/moveTime, 0, 0);
 					worldTransform_.rotation_ += Vector3(0, 0, -PI / moveTime / 2);
@@ -218,10 +252,21 @@ void Player::Move() {
 								}
 							}
 						}
+						else if (map_->mapchip[pos[0]][pos[1]] == 6) {
+							for (int x = 0; x < map_->xElement; x++) {
+								for (int z = 0; z < map_->zElement; z++) {
+									if (map_->mapchip[x][z] == 7) {
+										pos[0] = x;
+										pos[1] = z;
+										worldTransform_.translation_ = map_->worldTransform_[x][z].translation_;
+									}
+								}
+							}
+						}
 					}
 				}else if (map_->mapchip[pos[0] + 1][pos[1]] == 1) {
 					//配列の先頭を削除
-					a.erase(a.begin());
+					inputMemory.erase(inputMemory.begin());
 					//タイマーの初期化
 					moveTimer_ = moveTime;
 				}
@@ -230,9 +275,9 @@ void Player::Move() {
 	}
 	else if (moveTimer_ < 0) {
 	//入力されたキー情報が残っているなら
-		if (!a.empty()) {
+		if (!inputMemory.empty()) {
 			//配列の先頭を削除
-			a.erase(a.begin());
+			inputMemory.erase(inputMemory.begin());
 		}
 		//タイマーの初期化
 		moveTimer_ = moveTime;

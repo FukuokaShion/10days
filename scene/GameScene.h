@@ -63,15 +63,31 @@ class GameScene {
 	/// ゲームシーン用
 	/// </summary>
 	
-	//タイトル用
-	uint32_t titlePic = 0;
-	Sprite* title;
-	//クリア画面用
-	uint32_t selectStagePic = 0;
-	Sprite* selectStage;
+	  //タイトル用
+	uint32_t titlePic[2] = {};
+	Sprite* title[2];
+	int titlePicTimer = 60;
+	int titlenum = 0;
 	//ステージ選択用
+	uint32_t selectStagePic[6] = {};
+	Sprite* selectStage[6];
+	Vector2 selectStageSize[6];
+	Vector2 selectStagePos[6];
+	int stageMax = 6;
+	int selectTimer_;
+	int selectTime = 60;
+	int changeStage;
+
+	//クリア画面用
 	uint32_t clearPic = 0;
 	Sprite* clear;
+	uint32_t titleButtonPic = 0;
+	Sprite* titileButton;
+	uint32_t nextButtonPic = 0;
+	Sprite* nextButton;
+	uint32_t buttonSelectFramePic = 0;
+	Sprite* buttonSelectFrame;
+	int selectButton = 0;
 
 	//オブジェクト
 	Map* map_ = nullptr;

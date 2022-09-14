@@ -15,8 +15,8 @@ public:
 	//マップチップ
 	int xElement;
 	int zElement;
-	int mapchip[15][15];
-	WorldTransform worldTransform_[15][15];
+	int mapchip[16][16];
+	WorldTransform worldTransform_[16][16];
 
 	
 
@@ -29,8 +29,10 @@ public:
 	Model* teleportModel_ = nullptr;
 
 	uint32_t baseTexture = 0;
+	uint32_t teleportInTexture = 0;
+	uint32_t teleportOutTexture = 0;
 	
 	////土台用
 	int baseMapchip[15][15];
-	WorldTransform baseWorldTransform_[15][15];
+	WorldTransform baseWorldTransform_[16][16];
 };

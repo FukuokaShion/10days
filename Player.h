@@ -26,7 +26,7 @@ class Player {
 	float PI = 3.141592;
 
 	//Move—p
-	std::vector<int> a;
+	std::vector<int> inputMemory;
 	const int  moveTime = 50;
 	int moveTimer_ = moveTime;
 };

@@ -101,7 +101,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		// ゲームシーンの描画
 		gameScene->Draw();
 		// 軸表示の描画
-		axisIndicator->Draw();
+		//axisIndicator->Draw();
 		// プリミティブ描画のリセット
 		primitiveDrawer->Reset();
 		// 描画終了
